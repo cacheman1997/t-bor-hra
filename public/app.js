@@ -1009,7 +1009,20 @@ async function openClaimVerifyRequestAdminModal(claimVerifyRequestId) {
 
 function openAssignTaskModal(claimVerifyRequestId) {
     const dummyTasks = state.data?.dummyTasks || [];
-    const options = dummyTasks.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("");
+    // If empty (legacy state?), fallback to hardcoded list
+    const fallbackTasks = [
+        "Udělejte 10 dřepů a pošlete video/foto.",
+        "Zaspívejte týmovou hymnu.",
+        "Najděte v okolí červený předmět a vyfoťte ho.",
+        "Vytvořte z těl písmeno T.",
+        "Odpovězte na hádanku: Co má zuby, ale nekouše?",
+        "Udělejte selfie s celým týmem.",
+        "Postavte malou pyramidu z kamenů/klacků.",
+        "Vyfoťte nejvyšší strom v okolí."
+    ];
+    const tasksToShow = dummyTasks.length > 0 ? dummyTasks : fallbackTasks;
+
+    const options = tasksToShow.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("");
     
     const body = `
         <div class="panelTitle">Vyber nebo napiš úkol</div>
