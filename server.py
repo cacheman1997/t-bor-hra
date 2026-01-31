@@ -78,7 +78,20 @@ def save_base64_image(data_uri: str, prefix: str) -> str | None:
 def read_state() -> dict:
     ensure_data_dir()
     if not os.path.exists(STATE_PATH):
-        raise RuntimeError("Chybí data/state.json")
+        # Create empty default state if missing
+        default_state = {
+            "version": 1,
+            "config": {"gameStartMs": now_ms(), "gameLocked": False},
+            "teams": [],
+            "territories": [],
+            "claimRequests": [],
+            "claimVerifyRequests": [],
+            "eventLog": [],
+            "teamStats": {}
+        }
+        with open(STATE_PATH, "w", encoding="utf-8") as f:
+            json.dump(default_state, f, ensure_ascii=False, indent=2)
+    
     with open(STATE_PATH, "r", encoding="utf-8") as f:
         state = json.load(f)
     try:
