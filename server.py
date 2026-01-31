@@ -1701,6 +1701,25 @@ class Handler(SimpleHTTPRequestHandler):
             json_response(self, HTTPStatus.OK, {"ok": True})
             return
 
+        if parsed.path == "/api/admin/reset_teams":
+            token = str(body.get("token") or "")
+            session = sessions.get(token)
+            if not session or session.get("role") != "admin":
+                json_response(self, HTTPStatus.FORBIDDEN, {"error": "Jen admin."})
+                return
+            
+            state = read_state()
+            state["teams"] = [
+                {"id": "1", "name": "Modrá", "color": "#0000ff", "pin": "1234"},
+                {"id": "2", "name": "Červená", "color": "#ff0000", "pin": "1234"},
+                {"id": "3", "name": "Zelená", "color": "#00ff00", "pin": "1234"},
+                {"id": "4", "name": "Žlutá", "color": "#ffff00", "pin": "1234"},
+            ]
+            write_state(state)
+            broadcaster.broadcast_state(state)
+            json_response(self, HTTPStatus.OK, {"ok": True})
+            return
+
         json_response(self, HTTPStatus.NOT_FOUND, {"error": "Neznámý endpoint."})
 
 
