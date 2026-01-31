@@ -1167,7 +1167,7 @@ class Handler(SimpleHTTPRequestHandler):
                     r
                     for r in (state.get("claimVerifyRequests", []) or [])
                     if isinstance(r, dict)
-                    and r.get("status", "pending") == "pending"
+                    and r.get("status") in ("pending", "approved") # Include approved to avoid duplicate requests while waiting for task
                     and r.get("territoryId") == territory_id
                     and r.get("teamId") == team_id
                 ),
