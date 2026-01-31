@@ -1636,6 +1636,52 @@ class Handler(SimpleHTTPRequestHandler):
             json_response(self, HTTPStatus.OK, {"ok": True, "status": req["status"]})
             return
 
+        if parsed.path == "/api/admin/claimVerifyRequest/assignTask":
+            if session.get("role") != "admin":
+                json_response(self, HTTPStatus.FORBIDDEN, {"error": "Jen admin."})
+                return
+            request_id = str(body.get("claimVerifyRequestId") or "")
+            task_text = str(body.get("task") or "").strip()
+            
+            if not request_id:
+                json_response(self, HTTPStatus.BAD_REQUEST, {"error": "Chybí claimVerifyRequestId."})
+                return
+            if not task_text:
+                json_response(self, HTTPStatus.BAD_REQUEST, {"error": "Chybí text úkolu."})
+                return
+
+            state = read_state()
+            if is_game_locked(state):
+                json_response(self, HTTPStatus.LOCKED, {"error": "Hra je ukončená."})
+                return
+            req = next(
+                (r for r in (state.get("claimVerifyRequests", []) or []) if isinstance(r, dict) and r.get("id") == request_id),
+                None,
+            )
+            if not req:
+                json_response(self, HTTPStatus.NOT_FOUND, {"error": "Žádost neexistuje."})
+                return
+            
+            # Allow assigning task if it's approved OR pending (skip approval step if desired, but UI flows approved->task)
+            # Actually, standard flow is Pending -> Approved -> TaskAssigned
+            if req.get("status") not in ("approved", "pending"): 
+                 # We allow pending too, in case admin wants to skip explicit "OK" and just assign task immediately
+                 pass
+            
+            if req.get("status") == "rejected":
+                 json_response(self, HTTPStatus.BAD_REQUEST, {"error": "Žádost byla zamítnuta."})
+                 return
+
+            req["status"] = "task_assigned"
+            req["assignedTask"] = task_text
+            req["resolvedAtMs"] = now_ms()
+            req["expiresAtMs"] = now_ms() + 60 * 60 * 1000 # 1 hour to complete task
+
+            write_state(state)
+            broadcaster.broadcast_state(state)
+            json_response(self, HTTPStatus.OK, {"ok": True})
+            return
+
         json_response(self, HTTPStatus.NOT_FOUND, {"error": "Neznámý endpoint."})
 
 

@@ -1859,6 +1859,37 @@ function onTerritoryClicked(territoryId) {
     });
 }
 
+function verifyGpsInsideTerritory(territory) {
+  if (!navigator.geolocation) throw new Error("Tento prohlížeč nepodporuje GPS.");
+
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const point = [pos.coords.latitude, pos.coords.longitude];
+        const poly = territory.polygon;
+        if (!Array.isArray(poly) || poly.length < 3) {
+          reject(new Error("Území nemá polygon."));
+          return;
+        }
+        const inside = pointInPolygon(point, poly);
+        if (!inside) {
+          reject(new Error("Jsi mimo hranice území."));
+          return;
+        }
+        resolve(point);
+      },
+      (err) => {
+        reject(new Error("Nepodařilo se získat polohu (povolte GPS)."));
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 5000
+      }
+    );
+  });
+}
+
 function getGpsPosition() {
   if (!navigator.geolocation) throw new Error("Tento prohlížeč nepodporuje GPS.");
 
