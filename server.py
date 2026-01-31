@@ -38,14 +38,14 @@ def ensure_data_dir() -> None:
     os.makedirs(UPLOADS_DIR, exist_ok=True)
     
     # If state.json is missing in DATA_DIR (e.g. empty volume), try to copy from INITIAL_DATA_DIR
-    if not os.path.exists(STATE_PATH) and os.path.exists(INITIAL_DATA_DIR):
-        print("Initializing data from initial_data...")
-        for filename in os.listdir(INITIAL_DATA_DIR):
-            src = os.path.join(INITIAL_DATA_DIR, filename)
-            dst = os.path.join(DATA_DIR, filename)
-            if os.path.isfile(src) and not os.path.exists(dst):
-                shutil.copy2(src, dst)
-                print(f"Copied {filename} to {DATA_DIR}")
+    # if not os.path.exists(STATE_PATH) and os.path.exists(INITIAL_DATA_DIR):
+    #     print("Initializing data from initial_data...")
+    #     for filename in os.listdir(INITIAL_DATA_DIR):
+    #         src = os.path.join(INITIAL_DATA_DIR, filename)
+    #         dst = os.path.join(DATA_DIR, filename)
+    #         if os.path.isfile(src) and not os.path.exists(dst):
+    #             shutil.copy2(src, dst)
+    #             print(f"Copied {filename} to {DATA_DIR}")
 
 
 def save_base64_image(data_uri: str, prefix: str) -> str | None:
@@ -1201,6 +1201,8 @@ class Handler(SimpleHTTPRequestHandler):
                 "createdAtMs": now_ms(),
                 "resolvedAtMs": None,
                 "expiresAtMs": None,
+                "lat": lat,
+                "lng": lng,
             }
             state.setdefault("claimVerifyRequests", []).append(req)
             write_state(state)

@@ -320,7 +320,17 @@
   "attackLocks": {},
   "claimRequests": [],
   "teamCooldowns": {},
-  "claimVerifyRequests": [],
+  "claimVerifyRequests": [
+    {
+      "id": "cv_f0a1acffcac6fbeb",
+      "territoryId": "z1",
+      "teamId": "t1",
+      "status": "pending",
+      "createdAtMs": 1769874501024,
+      "resolvedAtMs": null,
+      "expiresAtMs": null
+    }
+  ],
   "teamEverOwned": {},
   "eventLog": [],
   "territoryLocks": {},

@@ -44,49 +44,63 @@ const soundManager = {
   init() {
     if (!this.ctx) {
       const Ctor = window.AudioContext || window.webkitAudioContext;
-      if (Ctor) this.ctx = new Ctor();
+      if (Ctor) {
+        try {
+          this.ctx = new Ctor();
+        } catch (e) {
+          console.error("AudioContext failed", e);
+        }
+      }
     }
     if (this.ctx && this.ctx.state === "suspended") {
       this.ctx.resume().catch(() => {});
     }
   },
   playPing() {
-    this.init();
-    if (!this.ctx) return;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(880, this.ctx.currentTime);
-    gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.5);
-    osc.start();
-    osc.stop(this.ctx.currentTime + 0.5);
-  },
-  playFanfare() {
-    this.init();
-    if (!this.ctx) return;
-    const now = this.ctx.currentTime;
-    const notes = [392.00, 523.25, 659.25, 783.99, 523.25, 783.99]; // G C E G C G
-    const durations = [0.15, 0.15, 0.15, 0.4, 0.15, 0.6];
-    let t = now;
-    notes.forEach((freq, i) => {
+    try {
+      this.init();
+      if (!this.ctx) return;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.connect(gain);
       gain.connect(this.ctx.destination);
-      osc.type = "triangle";
-      osc.frequency.value = freq;
-      const d = durations[i];
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.15, t + 0.02);
-      gain.gain.setValueAtTime(0.15, t + d - 0.02);
-      gain.gain.linearRampToValueAtTime(0, t + d);
-      osc.start(t);
-      osc.stop(t + d);
-      t += d;
-    });
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(880, this.ctx.currentTime);
+      gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.5);
+      osc.start();
+      osc.stop(this.ctx.currentTime + 0.5);
+    } catch (e) {
+      console.error("playPing failed", e);
+    }
+  },
+  playFanfare() {
+    try {
+      this.init();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      const notes = [392.00, 523.25, 659.25, 783.99, 523.25, 783.99]; // G C E G C G
+      const durations = [0.15, 0.15, 0.15, 0.4, 0.15, 0.6];
+      let t = now;
+      notes.forEach((freq, i) => {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.type = "triangle";
+        osc.frequency.value = freq;
+        const d = durations[i];
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(0.15, t + 0.02);
+        gain.gain.setValueAtTime(0.15, t + d - 0.02);
+        gain.gain.linearRampToValueAtTime(0, t + d);
+        osc.start(t);
+        osc.stop(t + d);
+        t += d;
+      });
+    } catch (e) {
+      console.error("playFanfare failed", e);
+    }
   }
 };
 
@@ -979,7 +993,13 @@ async function openClaimVerifyRequestAdminModal(claimVerifyRequestId) {
          }
          
          if (hasCoords) {
-             L.marker([lat, lng]).addTo(mm).bindPopup(team?.name ?? "Tým").openPopup();
+             L.circleMarker([lat, lng], {
+                color: '#fff',
+                weight: 2,
+                fillColor: team?.color ?? 'red',
+                fillOpacity: 1,
+                radius: 8
+             }).addTo(mm).bindPopup(team?.name ?? "Tým").openPopup();
          }
      } catch(e) {
          console.error(e);
@@ -1683,7 +1703,17 @@ function showTerritoryModal(territoryId, info) {
       kind: "primary",
       onClick: async () => {
         try {
-          const point = await verifyGpsInsideTerritory(z);
+          const point = await getGpsPosition();
+          // Optional check: warn if outside, but still allow sending? 
+          // User said "admin confirms or not", implying we should send it.
+          // But maybe we should warn the user they are outside?
+          const inside = pointInPolygon(point, z.polygon);
+          if (!inside) {
+             if (!confirm("Podle GPS jsi mimo vyznačené území. Chceš přesto odeslat žádost?")) {
+                 return;
+             }
+          }
+
           state.gpsOkByTerritoryId.set(territoryId, true);
           
           await apiPost("/api/territory/claimVerifyRequest", { 
@@ -1829,30 +1859,21 @@ function onTerritoryClicked(territoryId) {
     });
 }
 
-function verifyGpsInsideTerritory(territory) {
+function getGpsPosition() {
   if (!navigator.geolocation) throw new Error("Tento prohlížeč nepodporuje GPS.");
 
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const point = [pos.coords.latitude, pos.coords.longitude];
-        const poly = territory.polygon;
-        if (!Array.isArray(poly) || poly.length < 3) {
-          reject(new Error("Území nemá polygon."));
-          return;
-        }
-        const inside = pointInPolygon(point, poly);
-        if (!inside) {
-          reject(new Error("Jsi mimo hranice území."));
-          return;
-        }
-        resolve(true);
+        resolve([pos.coords.latitude, pos.coords.longitude]);
       },
-      reject,
+      (err) => {
+        reject(new Error("Nepodařilo se získat polohu (povolte GPS)."));
+      },
       {
         enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 5000
+        maximumAge: 0
       }
     );
   });
