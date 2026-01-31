@@ -647,6 +647,7 @@ function renderAdminBattles() {
   const claimVerifyRequests = Array.isArray(state.data?.claimVerifyRequests)
     ? state.data.claimVerifyRequests
     : [];
+  // Include pending AND approved (waiting for task assignment)
   const pendingClaimVerify = claimVerifyRequests
     .filter((r) => r && typeof r === "object" && ["pending", "approved"].includes(r.status ?? "pending"))
     .sort((a, b) => (b.createdAtMs ?? 0) - (a.createdAtMs ?? 0));
