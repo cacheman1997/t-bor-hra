@@ -102,6 +102,30 @@ def read_state() -> dict:
     
     with open(STATE_PATH, "r", encoding="utf-8") as f:
         state = json.load(f)
+        
+    # AUTO-FIX: If teams are missing or empty (broken state), restore them
+    if not state.get("teams"):
+        state["teams"] = [
+            {"id": "1", "name": "Modrá", "color": "#0000ff", "pin": "modra"},
+            {"id": "2", "name": "Červená", "color": "#ff0000", "pin": "cervena"},
+            {"id": "3", "name": "Zelená", "color": "#00ff00", "pin": "zelena"},
+            {"id": "4", "name": "Žlutá", "color": "#ffff00", "pin": "zluta"},
+            {"id": "5", "name": "Oranžová", "color": "#ffa500", "pin": "oranzova"},
+            {"id": "6", "name": "Fialová", "color": "#800080", "pin": "fialova"},
+            {"id": "7", "name": "Růžová", "color": "#ffc0cb", "pin": "ruzova"},
+        ]
+        if "config" not in state: state["config"] = {}
+        state["config"]["adminPin"] = "1234"
+        write_state(state)
+
+    # AUTO-FIX: Always try to load territories from map.geojson if they are missing or if config says so
+    # Default to map.geojson if not configured
+    if not state.get("config", {}).get("territoriesGeojson"):
+        if "config" not in state: state["config"] = {}
+        state["config"]["territoriesGeojson"] = "map.geojson"
+        state["config"]["mapMode"] = "osm" # Ensure map mode is set
+        write_state(state)
+
     try:
         apply_geojson_territories(state)
     except Exception:
