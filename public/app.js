@@ -1351,7 +1351,8 @@ function startStream() {
   });
 
   es.addEventListener("error", () => {
-    setStatus("Odpojeno");
+    // Only set error status if we are really disconnected for a while
+    // setStatus("Odpojeno");
     state.streamFailCount = Number(state.streamFailCount || 0) + 1;
     stopStream();
     if (state.streamFailCount >= 3) {
@@ -1360,6 +1361,10 @@ function startStream() {
     }
     scheduleStreamReconnect();
   });
+}
+
+function scheduleStreamReconnect() {
+    setTimeout(startStream, state.streamRetryMs || 1000);
 }
 
 function startPolling() {
@@ -1925,7 +1930,13 @@ if (menuToggleBtn && sidebar && sidebarOverlay) {
 }
 
 // Start
-loadInitialState().catch((e) => {
-  setStatus("Chyba načítání: " + e.message);
-  console.error(e);
-});
+loadInitialState()
+  .then(() => {
+     startStream();
+  })
+  .catch((e) => {
+    setStatus("Chyba načítání: " + e.message);
+    console.error(e);
+    // Retry
+    setTimeout(() => window.location.reload(), 3000);
+  });
