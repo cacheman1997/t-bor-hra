@@ -772,10 +772,50 @@ function renderAdminBattles() {
     `;
   } else {
     adminActions.innerHTML = `
+      <button class="btn" data-action="upload-map" style="margin-right:auto">NAHRÁT MAPU</button>
       <button class="btn danger" data-action="start">RESTART</button>
       <button class="btn danger" data-action="lock">KONEC</button>
     `;
   }
+
+  adminActions.querySelector('[data-action="upload-map"]')?.addEventListener("click", () => {
+    openModal({
+        title: "Nahrát mapu (GeoJSON)",
+        bodyHtml: `
+            <div class="hint">Vyberte soubor map.geojson. Tím se obnoví všechna území.</div>
+            <input type="file" id="mapUploadInput" accept=".geojson,.json" style="width:100%;margin-top:10px">
+        `,
+        actions: [
+            { label: "Zrušit", onClick: closeModal },
+            { 
+                label: "Nahrát", 
+                kind: "primary", 
+                onClick: () => {
+                    const file = document.getElementById("mapUploadInput")?.files?.[0];
+                    if (!file) return alert("Vyberte soubor.");
+                    
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const json = JSON.parse(e.target.result);
+                            json.token = state.token; // Add token to body
+                            apiPost("/api/admin/save_geojson", json)
+                            .then(() => {
+                                alert("Mapa nahrána!");
+                                closeModal();
+                                forceRefresh();
+                            })
+                            .catch(err => alert("Chyba: " + err.message));
+                        } catch (err) {
+                            alert("Chyba při čtení souboru: " + err.message);
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            }
+        ]
+    });
+  });
 
   adminActions.querySelector('[data-action="start"]')?.addEventListener("click", () => {
     openModal({
