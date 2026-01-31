@@ -125,6 +125,16 @@ def read_state() -> dict:
         state["config"]["territoriesGeojson"] = "map.geojson"
         state["config"]["mapMode"] = "osm" # Ensure map mode is set
         write_state(state)
+    
+    # Force reload of territories if they are empty in state but map.geojson is configured
+    if not state.get("territories") and state.get("config", {}).get("territoriesGeojson"):
+        try:
+             apply_geojson_territories(state)
+             # If we successfully loaded territories, save them to state (or at least the config)
+             if state.get("territories"):
+                 write_state(state)
+        except Exception:
+             pass
 
     try:
         apply_geojson_territories(state)
