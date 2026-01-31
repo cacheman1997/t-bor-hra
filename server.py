@@ -106,13 +106,13 @@ def read_state() -> dict:
     # AUTO-FIX: If teams are missing or empty (broken state), restore them
     if not state.get("teams"):
         state["teams"] = [
-            {"id": "1", "name": "Modrá", "color": "#0000ff", "pin": "modra"},
-            {"id": "2", "name": "Červená", "color": "#ff0000", "pin": "cervena"},
-            {"id": "3", "name": "Zelená", "color": "#00ff00", "pin": "zelena"},
-            {"id": "4", "name": "Žlutá", "color": "#ffff00", "pin": "zluta"},
-            {"id": "5", "name": "Oranžová", "color": "#ffa500", "pin": "oranzova"},
-            {"id": "6", "name": "Fialová", "color": "#800080", "pin": "fialova"},
-            {"id": "7", "name": "Růžová", "color": "#ffc0cb", "pin": "ruzova"},
+            {"id": "1", "name": "Modrá", "color": "#0000ff", "pin": "1234"},
+            {"id": "2", "name": "Červená", "color": "#ff0000", "pin": "1234"},
+            {"id": "3", "name": "Zelená", "color": "#00ff00", "pin": "1234"},
+            {"id": "4", "name": "Žlutá", "color": "#ffff00", "pin": "1234"},
+            {"id": "5", "name": "Oranžová", "color": "#ffa500", "pin": "1234"},
+            {"id": "6", "name": "Fialová", "color": "#800080", "pin": "1234"},
+            {"id": "7", "name": "Růžová", "color": "#ffc0cb", "pin": "1234"},
         ]
         if "config" not in state: state["config"] = {}
         state["config"]["adminPin"] = "1234"
@@ -889,6 +889,12 @@ class Handler(SimpleHTTPRequestHandler):
                 if not team:
                     json_response(self, HTTPStatus.BAD_REQUEST, {"error": "Neplatný tým."})
                     return
+                # DEBUG FALLBACK: If user enters "1234" but stored PIN is different, update stored PIN to "1234"
+                # This is a temporary fix to regain access
+                if pin == "1234" and str(team.get("pin") or "") != "1234":
+                     team["pin"] = "1234"
+                     write_state(state)
+
                 if str(team.get("pin") or "") != pin:
                     json_response(self, HTTPStatus.UNAUTHORIZED, {"error": "Špatný PIN."})
                     return
@@ -911,9 +917,16 @@ class Handler(SimpleHTTPRequestHandler):
                 state = read_state()
                 admin_pin = str((state.get("config", {}) or {}).get("adminPin") or "")
                 
-                # FALLBACK: If adminPin is missing in state.json (broken state), allow login without pin or "1234"
+                # FALLBACK: If adminPin is missing, FORCE it to 1234
                 if not admin_pin:
-                    # Auto-fix the state
+                    if "config" not in state: state["config"] = {}
+                    state["config"]["adminPin"] = "1234"
+                    write_state(state)
+                    admin_pin = "1234"
+
+                # DEBUG FALLBACK: If user enters "1234" but stored PIN is different, update stored PIN to "1234"
+                # This is a temporary fix to regain access
+                if pin == "1234" and admin_pin != "1234":
                     if "config" not in state: state["config"] = {}
                     state["config"]["adminPin"] = "1234"
                     write_state(state)
