@@ -1,0 +1,600 @@
+:root {
+  --bg: #0b1020;
+  --panel: #111a33;
+  --text: #e6eaf2;
+  --muted: #9aa7c2;
+  --border: rgba(255, 255, 255, 0.08);
+  --danger: #ef4444;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --team-color: rgba(255, 255, 255, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden; /* Prevent body scroll, handle in sidebar/map */
+}
+
+/* Custom Leaflet Controls Position */
+.leaflet-top.leaflet-right {
+  top: 50px !important; /* Move controls down */
+}
+
+.save-btn-custom {
+  background-color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+  border: 2px solid rgba(0,0,0,0.2);
+  color: black;
+}
+
+/* Remove default focus outline for Leaflet paths */
+path.leaflet-interactive:focus {
+  outline: none;
+}
+
+.loginLayout {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow: auto;
+}
+
+.loginCard {
+  width: min(560px, 100%);
+}
+
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.teamBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+}
+
+.teamBtn.selected {
+  outline: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.teamBtnTitle {
+  font-weight: 800;
+}
+
+.teamBtnMeta {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Layout */
+.layout {
+  display: block; /* Was grid */
+  height: 100%;
+  position: relative;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  background: rgba(11, 16, 32, 0.98);
+  backdrop-filter: blur(15px);
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+  z-index: 1200;
+  padding: 12px;
+  overflow-y: auto;
+  border-right: 1px solid var(--team-color);
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebarOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 1150; /* Between map (default) and sidebar (1200) */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.sidebarOverlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mapWrap {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+  background: #0a0f1f;
+}
+
+/* Mobile Toggle Buttons - Now visible always */
+.mobileToggleBtn {
+  position: fixed;
+  z-index: 1300; /* Higher than sidebar (1200) */
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  text-decoration: none; /* For links */
+}
+
+/* Panel & Inputs */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.panelTitle {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.label {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text);
+}
+
+select {
+  background-color: #000;
+  color: #fff;
+}
+
+select option {
+  background-color: #000;
+  color: #fff;
+}
+
+.btn {
+  padding: 9px 10px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: color-mix(in srgb, var(--team-color), transparent 70%);
+  border-color: var(--team-color);
+  color: #fff;
+}
+
+.btn.danger {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.45);
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.statusBox {
+  font-size: 13px;
+  line-height: 1.25rem;
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 2000;
+}
+
+.modalOverlay.hidden {
+  display: none;
+}
+
+.modal {
+  width: min(560px, 100%);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.modalTitle {
+  font-weight: 800;
+}
+
+.iconBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalBody {
+  padding: 12px;
+  font-size: 14px;
+  line-height: 1.3rem;
+  overflow-y: auto;
+}
+
+.modalActions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 12px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 12px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+/* Battle Bar - REMOVED */
+
+/* Overlays */
+.realTimeClock {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 1100;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  font-size: 12px;
+  color: var(--text);
+  pointer-events: none;
+}
+
+.eventLogPanel {
+  position: fixed;
+  top: 44px;
+  right: 12px;
+  z-index: 1090;
+  width: 340px;
+  max-width: calc(100vw - 24px);
+  max-height: 60vh;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(11, 16, 32, 0.95);
+  backdrop-filter: blur(12px);
+  padding: 10px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+  transform: translateX(0);
+}
+
+.eventLogPanel.collapsed {
+  transform: translateX(110%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.eventLogTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.eventLogTitle {
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--text);
+}
+
+.eventLogHeader {
+  display: grid;
+  grid-template-columns: 64px 64px 56px 1fr 76px;
+  gap: 10px;
+  padding: 4px 8px 8px 8px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.eventLogRows {
+  overflow: auto;
+  max-height: calc(50vh - 40px);
+  padding-right: 4px;
+}
+
+.eventLogRow {
+  display: grid;
+  grid-template-columns: 64px 64px 56px 1fr 76px;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  margin-bottom: 8px;
+}
+
+.eventLogTime,
+.eventLogCell {
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.eventLogText {
+  font-size: 12px;
+  line-height: 1.2rem;
+}
+
+/* Score Board Items */
+.scoreRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  margin-bottom: 8px;
+}
+
+.scoreRank {
+  font-weight: bold;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.scoreName {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 650;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.scoreCount {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.smallInputRow {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.battleRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  margin-bottom: 8px;
+}
+
+.battleRowTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.battleRowTitle {
+  font-weight: 650;
+}
+
+.battleRowMeta {
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Map Markers */
+.territoryNumberIcon {
+  pointer-events: none;
+}
+
+.territoryNumber {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.55);
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .btn {
+    padding: 12px 14px; /* Larger touch targets */
+    font-size: 14px;
+  }
+
+  .iconBtn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .mobileToggleBtn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .sidebar {
+    width: 85%; /* Slightly wider on mobile */
+    max-width: 320px;
+  }
+
+  .modal {
+    max-height: 100%;
+    border-radius: 0; /* Full screen feel or bottom sheet */
+    height: auto;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    margin: 0;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+  }
+  
+  .modalOverlay {
+    padding: 0;
+    align-items: flex-end; /* Bottom sheet alignment */
+  }
+
+  .modalBody {
+    max-height: 70vh;
+  }
+
+  /* Improve list readability on mobile */
+  .scoreRow, .battleRow, .eventLogRow {
+    padding: 12px;
+    margin-bottom: 10px;
+  }
+
+  .eventLogHeader {
+    display: none; /* Hide header on mobile, stack content instead */
+  }
+
+  .eventLogRow {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .eventLogTime {
+    font-size: 11px;
+    opacity: 0.7;
+  }
+
+  .eventLogCell {
+    font-size: 13px;
+  }
+  
+  .smallInputRow {
+    grid-template-columns: 1fr; /* Stack label and input */
+    gap: 6px;
+  }
+  
+  .label {
+    margin-bottom: 2px;
+  }
+}

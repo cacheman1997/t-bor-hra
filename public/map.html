@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Táborová hra – mapa</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="/style.css?v=20251222d" />
+    <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        function safeText(s) {
+          try {
+            return String(s || "");
+          } catch (e) {
+            return "Chyba";
+          }
+        }
+        function show(msg) {
+          try {
+            var el = document.getElementById("statusBox");
+            if (el) el.textContent = msg;
+          } catch (e) {}
+        }
+        window.addEventListener("error", function (e) {
+          var m = "JS chyba: " + safeText(e && (e.message || e.error));
+          show(m);
+        });
+        window.addEventListener("unhandledrejection", function (e) {
+          var r = e && e.reason;
+          var m = "JS promise chyba: " + safeText((r && (r.message || r)) || r);
+          show(m);
+        });
+      })();
+    </script>
+    <div id="realTimeClock" class="realTimeClock"></div>
+    
+    <!-- Mobile toggles -->
+    <button id="menuToggleBtn" class="mobileToggleBtn" style="top: 12px; left: 12px;">☰</button>
+    <a href="/log.html" target="_blank" class="mobileToggleBtn" style="top: 54px; left: 12px; text-decoration: none; font-size: 13px;">Log</a>
+    <a href="/rules.html" class="mobileToggleBtn" style="top: 96px; left: 12px; text-decoration: none; font-size: 18px; font-family: serif;">i</a>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="panel">
+          <div class="panelTitle">Účet</div>
+          <div id="loginStatus" class="muted"></div>
+          <div style="margin-top:10px">
+            <button id="logoutBtn" class="btn danger" style="width:100%">Odhlásit</button>
+            <a href="/rules.html" class="btn" style="display:block;text-align:center;text-decoration:none;margin-top:8px">Pravidla</a>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panelTitle">Žebříček</div>
+          <div id="leaderboard"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panelTitle">Stav</div>
+          <div id="statusBox" class="statusBox">Načítám…</div>
+        </div>
+
+        <div id="adminPanel" class="panel" style="display:none">
+          <div class="panelTitle">Admin</div>
+          <div id="adminBattles"></div>
+        </div>
+      </aside>
+      <div id="sidebarOverlay" class="sidebarOverlay"></div>
+
+      <main class="mapWrap">
+        <div id="map"></div>
+      </main>
+    </div>
+
+    <div id="modalOverlay" class="modalOverlay hidden">
+      <div class="modal">
+        <div class="modalHeader">
+          <div id="modalTitle" class="modalTitle"></div>
+          <button id="modalClose" class="iconBtn" aria-label="Zavřít">✕</button>
+        </div>
+        <div id="modalBody" class="modalBody"></div>
+        <div id="modalActions" class="modalActions"></div>
+      </div>
+    </div>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
+    <script src="/app.js?v=20260112a"></script>
+  </body>
+</html>

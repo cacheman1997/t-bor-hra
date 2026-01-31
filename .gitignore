@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.env
+.DS_Store
+# Ignore uploads but keep the folder structure
+data/uploads/*
+!data/uploads/.gitkeep
+# We keep state.json in git as a template, but in production it lives in the volume

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Táborová hra – přihlášení</title>
+    <link rel="stylesheet" href="/style.css?v=20251222b" />
+  </head>
+  <body>
+    <script>
+      (function () {
+        function safeText(s) {
+          try {
+            return String(s || "");
+          } catch (e) {
+            return "Chyba";
+          }
+        }
+        function show(msg) {
+          try {
+            var el = document.getElementById("loginStatus");
+            if (el) el.textContent = msg;
+          } catch (e) {}
+        }
+        window.addEventListener("error", function (e) {
+          var m = "JS chyba: " + safeText(e && (e.message || e.error));
+          show(m);
+        });
+        window.addEventListener("unhandledrejection", function (e) {
+          var r = e && e.reason;
+          var m = "JS promise chyba: " + safeText((r && (r.message || r)) || r);
+          show(m);
+        });
+      })();
+    </script>
+    <div id="realTimeClock" class="realTimeClock"></div>
+    <div class="loginLayout">
+      <div class="panel loginCard">
+        <div class="panelTitle">Rozjezdové menu</div>
+        <div class="muted" style="margin-bottom:10px">Vyber tým nebo Admin a přihlas se.</div>
+
+        <div id="teamMenu" class="teamGrid"></div>
+
+        <div class="row" style="grid-template-columns: 90px 1fr; margin-top: 14px">
+          <label class="label" for="passwordInput">Heslo</label>
+          <input id="passwordInput" type="password" autocomplete="current-password" />
+        </div>
+
+        <div class="row" style="grid-template-columns: 1fr; margin-top: 10px">
+          <button id="doLoginBtn" class="btn primary">Přihlásit</button>
+        </div>
+
+        <div id="loginStatus" class="muted"></div>
+      </div>
+    </div>
+
+    <script src="/login.js?v=20251222b"></script>
+  </body>
+</html>

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log událostí</title>
+    <link rel="stylesheet" href="/style.css?v=20251222d" />
+    <style>
+      body {
+        overflow: auto; /* Allow scrolling on this page */
+        padding: 20px;
+      }
+      .eventLogRows {
+        max-height: none; /* Full height */
+      }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Log událostí</h1>
+        <a href="/map.html" class="btn">Zpět na mapu</a>
+      </div>
+
+      <div class="panel">
+        <div class="eventLogHeader">
+            <div>Čas</div>
+            <div>Akce</div>
+            <div>Území</div>
+            <div>Týmy</div>
+            <div>Výsledek</div>
+        </div>
+        <div id="eventLogRows" class="eventLogRows">
+            <div class="muted">Načítám...</div>
+        </div>
+      </div>
+      
+      <!-- Hidden elements required by app.js to avoid errors -->
+      <div id="statusBox" style="display:none"></div>
+      <div id="loginStatus" style="display:none"></div>
+      <div id="logoutBtn" style="display:none"></div>
+      <div id="pointsBoard" style="display:none"></div>
+      <div id="areaBoard" style="display:none"></div>
+      <div id="locksBoard" style="display:none"></div>
+      <div id="adminPanel" style="display:none"></div>
+      <div id="adminBattles" style="display:none"></div>
+      <div id="modalOverlay" class="hidden"></div>
+      <div id="modalTitle"></div>
+      <div id="modalBody"></div>
+      <div id="modalActions"></div>
+      <div id="modalClose"></div>
+      <div id="battleBar"></div>
+    </div>
+
+    <script src="/app.js?v=20251222c"></script>
+  </body>
+</html>

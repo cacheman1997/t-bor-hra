@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pravidla hry</title>
+    <style>
+      body {
+        background: #0b1020;
+        color: #e6eaf2;
+        font-family: system-ui, -apple-system, sans-serif;
+        padding: 20px;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      h1, h2 { color: #fff; }
+      .section { margin-bottom: 30px; background: #111a33; padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+      .back-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .back-btn:hover { background: rgba(255,255,255,0.2); }
+    </style>
+  </head>
+  <body>
+    <a href="/map.html" class="back-btn">← Zpět na mapu</a>
+    
+    <h1>Pravidla hry</h1>
+
+    <div class="section">
+      <h2>Cíl hry</h2>
+      <p>Cílem je získat co nejvíce bodů obsazováním území a udržet je pod kontrolou svého týmu.</p>
+      <p>Body se počítají za:</p>
+      <ul>
+        <li>Počet obsazených území (1 bod za každé území).</li>
+        <li>Celkovou plochu obsazených území (bonus +2 body pro tým s největší plochou).</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Obsazování území</h2>
+      <p>Pokud je území volné, můžete ho obsadit:</p>
+      <ol>
+        <li>Dojděte fyzicky do území (pokud je zapnuta GPS kontrola).</li>
+        <li>Klikněte na území v mapě.</li>
+        <li>Odešlete žádost o obsazení (může být vyžadována odpověď na otázku).</li>
+        <li>Admin vaši žádost schválí nebo zamítne.</li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <h2>Bitvy a útoky</h2>
+      <p>Pokud je území obsazeno jiným týmem, můžete na něj zaútočit:</p>
+      <ol>
+        <li>Dojděte do území a klikněte na tlačítko "Zaútočit".</li>
+        <li>Po ověření polohy začne příprava (30s).</li>
+        <li>Poté začne bitva (např. 5 minut), během které musíte splnit bitevní úkol.</li>
+        <li>Po uplynutí času zadáte své skóre (0-10) a poznámku.</li>
+        <li>Admin vyhodnotí bitvu. Vítěz získá území.</li>
+      </ol>
+      <p>Pokud obránce vyhraje (nebo nastane remíza), území mu zůstává.</p>
+    </div>
+
+    <div class="section">
+      <h2>Omezení</h2>
+      <ul>
+        <li>Při špatné odpovědi na otázku můžete dostat "cooldown" (blokaci) na určitý čas.</li>
+        <li>Po bitvě může být území na chvíli zamčeno.</li>
+      </ul>
+    </div>
+  </body>
+</html>

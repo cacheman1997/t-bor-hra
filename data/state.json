@@ -1,0 +1,357 @@
+{
+  "version": 1,
+  "config": {
+    "mapMode": "geo",
+    "simpleMap": {},
+    "territoriesGeojson": "CTH_geo.geojson",
+    "territoriesGeojsonIdPrefix": "z",
+    "adminPin": "admin",
+    "gpsEnabled": false,
+    "gameStartMs": 1768395340424,
+    "gameLocked": false
+  },
+  "teams": [
+    {
+      "id": "t1",
+      "name": "Modrá",
+      "color": "#2563eb",
+      "pin": "modrá"
+    },
+    {
+      "id": "t2",
+      "name": "Červená",
+      "color": "#e11d48",
+      "pin": "červená"
+    },
+    {
+      "id": "t3",
+      "name": "Zelená",
+      "color": "#16a34a",
+      "pin": "zelená"
+    },
+    {
+      "id": "t4",
+      "name": "Žlutá",
+      "color": "#f59e0b",
+      "pin": "žlutá"
+    },
+    {
+      "id": "t5",
+      "name": "Fialová",
+      "color": "#7c3aed",
+      "pin": "fialová"
+    },
+    {
+      "id": "t6",
+      "name": "Tyrkysová",
+      "color": "#0ea5e9",
+      "pin": "tyrkysová"
+    },
+    {
+      "id": "t7",
+      "name": "Oranžová",
+      "color": "#f97316",
+      "pin": "oranžová"
+    }
+  ],
+  "territories": [
+    {
+      "id": "z1",
+      "name": "Území 1",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z2",
+      "name": "Území 2",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z3",
+      "name": "Území 3",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z4",
+      "name": "Území 4",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z5",
+      "name": "Území 5",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z6",
+      "name": "Území 6",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z7",
+      "name": "Území 7",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z8",
+      "name": "Území 8",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z9",
+      "name": "Území 9",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z10",
+      "name": "Území 10",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z11",
+      "name": "Území 11",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z12",
+      "name": "Území 12",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z13",
+      "name": "Území 13",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z14",
+      "name": "Území 14",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z15",
+      "name": "Území 15",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z16",
+      "name": "Území 16",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z17",
+      "name": "Území 17",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z18",
+      "name": "Území 18",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z19",
+      "name": "Území 19",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z20",
+      "name": "Území 20",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z21",
+      "name": "Území 21",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z22",
+      "name": "Území 22",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z23",
+      "name": "Území 23",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z24",
+      "name": "Území 24",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z25",
+      "name": "Území 25",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z26",
+      "name": "Území 26",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z27",
+      "name": "Území 27",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z28",
+      "name": "Území 28",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    },
+    {
+      "id": "z29",
+      "name": "Území 29",
+      "ownerTeamId": null,
+      "tasks": {
+        "claim": "Kolik je 1+1?"
+      },
+      "capturedAtMs": null
+    }
+  ],
+  "attackLocks": {},
+  "claimRequests": [],
+  "teamCooldowns": {},
+  "claimVerifyRequests": [],
+  "teamEverOwned": {},
+  "eventLog": [],
+  "territoryLocks": {},
+  "teamStats": {
+    "t1": {
+      "captures": 0,
+      "totalTimeMs": 0
+    },
+    "t2": {
+      "captures": 0,
+      "totalTimeMs": 0
+    },
+    "t3": {
+      "captures": 0,
+      "totalTimeMs": 0
+    },
+    "t4": {
+      "captures": 0,
+      "totalTimeMs": 0
+    },
+    "t5": {
+      "captures": 0,
+      "totalTimeMs": 0
+    },
+    "t6": {
+      "captures": 0,
+      "totalTimeMs": 0
+    },
+    "t7": {
+      "captures": 0,
+      "totalTimeMs": 0
+    }
+  }
+}
