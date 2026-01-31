@@ -654,12 +654,17 @@ function renderAdminBattles() {
 
   const nextPendingVerifyIds = new Set(pendingClaimVerify.map((r) => String(r.id ?? "")));
   const addedPendingVerify = [];
-  if (state.claimVerifyNotifyInitialized) {
-    for (const id of nextPendingVerifyIds) {
-      if (id && !state.lastPendingClaimVerifyRequestIds.has(id)) addedPendingVerify.push(id);
-    }
-  } else {
-    state.claimVerifyNotifyInitialized = true;
+  
+  // Force notification if last state was empty but we have items now (initial load fix)
+  if (!state.claimVerifyNotifyInitialized) {
+      state.claimVerifyNotifyInitialized = true;
+      state.lastPendingClaimVerifyRequestIds = new Set();
+  }
+
+  for (const id of nextPendingVerifyIds) {
+      if (!state.lastPendingClaimVerifyRequestIds.has(id)) {
+          addedPendingVerify.push(id);
+      }
   }
   state.lastPendingClaimVerifyRequestIds = nextPendingVerifyIds;
 
@@ -670,12 +675,16 @@ function renderAdminBattles() {
 
   const nextPendingIds = new Set(pendingClaims.map((r) => String(r.id ?? "")));
   const addedPending = [];
-  if (state.claimNotifyInitialized) {
-    for (const id of nextPendingIds) {
-      if (id && !state.lastPendingClaimRequestIds.has(id)) addedPending.push(id);
-    }
-  } else {
-    state.claimNotifyInitialized = true;
+
+  if (!state.claimNotifyInitialized) {
+      state.claimNotifyInitialized = true;
+      state.lastPendingClaimRequestIds = new Set();
+  }
+
+  for (const id of nextPendingIds) {
+      if (!state.lastPendingClaimRequestIds.has(id)) {
+          addedPending.push(id);
+      }
   }
   state.lastPendingClaimRequestIds = nextPendingIds;
 
