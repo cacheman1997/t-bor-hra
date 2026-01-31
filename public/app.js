@@ -1695,11 +1695,29 @@ function showTerritoryModal(territoryId, info) {
 
   if (info.canClaim || myClaimStatus || verifyPending || verifyApproved) {
     body += `<div style="margin-top:12px"><div class="panelTitle">Obsazení</div></div>`;
-    if (info.claimTask) {
-      body += `<div><div class="panelTitle">Úkol</div><div>${escapeHtml(info.claimTask ?? "")}</div></div>`;
+    
+    // Task Display for Team
+    if (state.role === "team" && state.me && info.claimTask) {
+        body += `
+          <div style="margin-top:12px;background:#f0f7ff;padding:10px;border-radius:4px;border:1px solid #cce5ff">
+            <div class="panelTitle">Úkol od vedení hry</div>
+            <div style="font-weight:bold;margin-top:4px">${escapeHtml(info.claimTask)}</div>
+            
+            <div class="smallInputRow" style="margin-top:10px">
+              <div class="label">Odpověď / Text</div>
+              <input type="text" id="claimAnswer" placeholder="Splněno / odpověď..." autocomplete="off">
+            </div>
+            
+            <div class="smallInputRow">
+              <div class="label">Fotka / Video (nepovinné)</div>
+              <input type="file" id="claimImage" accept="image/*,video/*" style="width:100%">
+            </div>
+          </div>
+        `;
     } else if (verifyPending) {
       body += `<div class="hint">Úkol se zobrazí po schválení adminem.</div>`;
     }
+
     if (myLatestClaim) {
       const st =
         myClaimStatus === "approved"
@@ -1711,9 +1729,6 @@ function showTerritoryModal(territoryId, info) {
       if (myClaimStatus === "pending") {
         body += `<div style="margin-top:10px"><div class="panelTitle">Odpověď</div><div>${escapeHtml(String(myLatestClaim.answer ?? "") || "(bez odpovědi)")}</div></div>`;
       }
-    }
-    if (canActTeam && info.canClaim && myClaimStatus !== "pending") {
-      body += `<div style="margin-top:10px" class="smallInputRow"><div class="label">Odpověď</div><input id="claimAnswer" type="text" maxlength="500"></div>`;
     }
   }
 
@@ -1809,6 +1824,8 @@ function showTerritoryModal(territoryId, info) {
         const fileInput = document.getElementById("claimImage");
         const file = fileInput?.files?.[0];
 
+        // Allow sending if ONLY file is present, OR if ONLY text is present, OR both.
+        // But not neither.
         if (!String(answer).trim() && !file) {
           openModal({
             title: "Obsazení",
@@ -1839,6 +1856,11 @@ function showTerritoryModal(territoryId, info) {
         };
 
         if (file) {
+            // Check file size (limit 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert("Fotka je příliš velká (max 5MB).");
+                return;
+            }
             const reader = new FileReader();
             reader.onload = (e) => send(e.target.result);
             reader.readAsDataURL(file);
