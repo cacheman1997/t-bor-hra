@@ -1736,6 +1736,12 @@ class Handler(SimpleHTTPRequestHandler):
                 state["config"] = cfg
             cfg["adminPin"] = "1234"
             
+            # Ensure territories are re-applied from GeoJSON
+            try:
+                apply_geojson_territories(state)
+            except Exception:
+                pass
+
             write_state(state)
             broadcaster.broadcast_state(state)
             json_response(self, HTTPStatus.OK, {"ok": True})
