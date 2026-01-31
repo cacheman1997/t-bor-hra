@@ -1419,6 +1419,7 @@ class Handler(SimpleHTTPRequestHandler):
             state["eventLog"] = []
             state["teamEverOwned"] = {}
             state["teamStats"] = {}
+            # state["gpsOkByTerritoryId"] is client side, no need to clear here
             cfg = state.get("config", {})
             if not isinstance(cfg, dict):
                 cfg = {}
