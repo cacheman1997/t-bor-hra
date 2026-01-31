@@ -81,12 +81,15 @@ def read_state() -> dict:
         # Create empty default state if missing
         default_state = {
             "version": 1,
-            "config": {"gameStartMs": now_ms(), "gameLocked": False},
+            "config": {"gameStartMs": now_ms(), "gameLocked": False, "adminPin": "1234"},
             "teams": [
-                {"id": "1", "name": "Modrá", "color": "#0000ff", "pin": "1234"},
-                {"id": "2", "name": "Červená", "color": "#ff0000", "pin": "1234"},
-                {"id": "3", "name": "Zelená", "color": "#00ff00", "pin": "1234"},
-                {"id": "4", "name": "Žlutá", "color": "#ffff00", "pin": "1234"},
+                {"id": "1", "name": "Modrá", "color": "#0000ff", "pin": "modra"},
+                {"id": "2", "name": "Červená", "color": "#ff0000", "pin": "cervena"},
+                {"id": "3", "name": "Zelená", "color": "#00ff00", "pin": "zelena"},
+                {"id": "4", "name": "Žlutá", "color": "#ffff00", "pin": "zluta"},
+                {"id": "5", "name": "Oranžová", "color": "#ffa500", "pin": "oranzova"},
+                {"id": "6", "name": "Fialová", "color": "#800080", "pin": "fialova"},
+                {"id": "7", "name": "Růžová", "color": "#ffc0cb", "pin": "ruzova"},
             ],
             "territories": [],
             "claimRequests": [],
@@ -1710,11 +1713,20 @@ class Handler(SimpleHTTPRequestHandler):
             
             state = read_state()
             state["teams"] = [
-                {"id": "1", "name": "Modrá", "color": "#0000ff", "pin": "1234"},
-                {"id": "2", "name": "Červená", "color": "#ff0000", "pin": "1234"},
-                {"id": "3", "name": "Zelená", "color": "#00ff00", "pin": "1234"},
-                {"id": "4", "name": "Žlutá", "color": "#ffff00", "pin": "1234"},
+                {"id": "1", "name": "Modrá", "color": "#0000ff", "pin": "modra"},
+                {"id": "2", "name": "Červená", "color": "#ff0000", "pin": "cervena"},
+                {"id": "3", "name": "Zelená", "color": "#00ff00", "pin": "zelena"},
+                {"id": "4", "name": "Žlutá", "color": "#ffff00", "pin": "zluta"},
+                {"id": "5", "name": "Oranžová", "color": "#ffa500", "pin": "oranzova"},
+                {"id": "6", "name": "Fialová", "color": "#800080", "pin": "fialova"},
+                {"id": "7", "name": "Růžová", "color": "#ffc0cb", "pin": "ruzova"},
             ]
+            cfg = state.get("config", {})
+            if not isinstance(cfg, dict):
+                cfg = {}
+                state["config"] = cfg
+            cfg["adminPin"] = "1234"
+            
             write_state(state)
             broadcaster.broadcast_state(state)
             json_response(self, HTTPStatus.OK, {"ok": True})
