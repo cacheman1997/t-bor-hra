@@ -1049,7 +1049,7 @@ class Handler(SimpleHTTPRequestHandler):
                     "canAttack": False, # Battles disabled
                     "locked": locked,
                     "lockUntilMs": lock_until_ms,
-                    "claimTask": assigned_task_text if task_assigned else (tasks.get("claim") if (verified or pending_claim) else None),
+                    "claimTask": assigned_task_text if task_assigned else (tasks.get("claim") if pending_claim else None),
                     "claimRequestPending": bool(pending_claim),
                     "claimRequestId": pending_claim.get("id") if isinstance(pending_claim, dict) else None,
                     "claimVerificationPending": bool(pending_verify),
